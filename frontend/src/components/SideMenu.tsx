@@ -46,6 +46,9 @@ const SideMenu: React.FC<SideMenuProps> = ({ isOpen, onClose }) => {
               <Link to="/event-list" onClick={onClose}>Event List</Link>
             </li>
             <li>
+              <Link to="/add-event" onClick={onClose}>Add Event</Link>
+            </li>
+            <li>
               <Link to="/past-events" onClick={onClose}>Past Events</Link>
             </li>
             <li>

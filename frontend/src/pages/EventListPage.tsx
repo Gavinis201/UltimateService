@@ -1,82 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../styles/EventListPage.css';
 
-// Mock data for events
-const mockEvents = [
-  {
-    id: 1,
-    title: 'Community Garden Cleanup',
-    date: '2024-06-15',
-    time: '9:00 AM - 12:00 PM',
-    location: 'City Park',
-    group: 'Environmental Team',
-    attendees: 8,
-    description: 'Help us clean up and maintain the community garden. Bring gloves and gardening tools if you have them.'
-  },
-  {
-    id: 2,
-    title: 'Food Bank Volunteering',
-    date: '2024-06-18',
-    time: '2:00 PM - 5:00 PM',
-    location: 'City Food Bank',
-    group: 'Food Distribution',
-    attendees: 12,
-    description: 'Assist in sorting donations and preparing food packages for distribution to families in need.'
-  },
-  {
-    id: 3,
-    title: 'Senior Center Visit',
-    date: '2024-06-22',
-    time: '1:00 PM - 3:00 PM',
-    location: 'Sunshine Senior Center',
-    group: 'Elder Care',
-    attendees: 6,
-    description: 'Spend time with seniors at the center, helping with activities and providing companionship.'
-  },
-  {
-    id: 4,
-    title: 'Beach Cleanup',
-    date: '2024-06-26',
-    time: '10:00 AM - 1:00 PM',
-    location: 'City Beach',
-    group: 'Environmental Team',
-    attendees: 15,
-    description: 'Join us for a beach cleanup to remove litter and debris from our local beach.'
-  },
-  {
-    id: 5,
-    title: 'Homeless Shelter Meal Service',
-    date: '2024-06-30',
-    time: '5:00 PM - 7:00 PM',
-    location: 'Hope Shelter',
-    group: 'Food Distribution',
-    attendees: 10,
-    description: 'Help prepare and serve meals to residents at the homeless shelter.'
-  }
-];
+interface Event {
+  id: number;
+  title: string;
+  date: string;
+  time: string;
+  location: string;
+  group: string;
+  attendees: number;
+  description: string;
+}
 
 const EventListPage: React.FC = () => {
+  const [events, setEvents] = useState<Event[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filter, setFilter] = useState('all');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  // Filter events based on search term and filter selection
-  const filteredEvents = mockEvents.filter(event => {
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/event');
+        if (!response.ok) {
+          throw new Error('Failed to fetch events');
+        }
+        const data: Event[] = await response.json();
+        setEvents(data);
+      } catch (err) {
+        setError('Error fetching events. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  const filteredEvents = events.filter(event => {
     const matchesSearch = event.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         event.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         event.group.toLowerCase().includes(searchTerm.toLowerCase());
-    
+                          event.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          event.group.toLowerCase().includes(searchTerm.toLowerCase());
+
     if (filter === 'all') return matchesSearch;
     return matchesSearch && event.group === filter;
   });
 
-  // Get unique group names for filter dropdown
-  const groups = Array.from(new Set(mockEvents.map(event => event.group)));
+  const groups = Array.from(new Set(events.map(event => event.group)));
 
   return (
     <div className="event-list-page">
       <div className="content">
         <h1>Event List</h1>
-        
+
         <div className="filter-section">
           <input
             type="text"
@@ -85,9 +62,9 @@ const EventListPage: React.FC = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="search-input"
           />
-          
-          <select 
-            value={filter} 
+
+          <select
+            value={filter}
             onChange={(e) => setFilter(e.target.value)}
             className="filter-dropdown"
           >
@@ -97,16 +74,20 @@ const EventListPage: React.FC = () => {
             ))}
           </select>
         </div>
-        
-        <div className="events-list">
-          {filteredEvents.length > 0 ? (
-            filteredEvents.map(event => (
+
+        {loading ? (
+          <p>Loading events...</p>
+        ) : error ? (
+          <p className="error">{error}</p>
+        ) : filteredEvents.length > 0 ? (
+          <div className="events-list">
+            {filteredEvents.map(event => (
               <div key={event.id} className="event-card">
                 <div className="event-header">
                   <h3>{event.title}</h3>
                   <span className="event-date">{new Date(event.date).toLocaleDateString()}</span>
                 </div>
-                
+
                 <div className="event-details">
                   <div className="detail-row">
                     <span className="label">Time:</span>
@@ -125,24 +106,22 @@ const EventListPage: React.FC = () => {
                     <span className="value">{event.attendees} people</span>
                   </div>
                 </div>
-                
+
                 <p className="event-description">{event.description}</p>
-                
+
                 <div className="event-actions">
                   <button className="sign-up-button">Sign Up</button>
                   <button className="details-button">Details</button>
                 </div>
               </div>
-            ))
-          ) : (
-            <div className="no-events">
-              <p>No events found matching your search criteria.</p>
-            </div>
-          )}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <p>No events found.</p>
+        )}
       </div>
     </div>
   );
 };
 
-export default EventListPage; 
+export default EventListPage;

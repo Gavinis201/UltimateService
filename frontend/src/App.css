@@ -145,3 +145,64 @@
     transform: rotate(360deg);
   }
 }
+
+/* AddEventPage styles */
+.add-event-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.add-event-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 500px;
+  background-color: var(--bg-light);
+  border-radius: var(--radius);
+  padding: 2rem;
+  box-shadow: var(--shadow-light);
+}
+
+.add-event-form input,
+.add-event-form textarea {
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border-radius: var(--radius-small);
+  border: 1px solid #ddd;
+  background-color: #f5f5f5;
+  font-size: 1rem;
+}
+
+.add-event-form button {
+  padding: 1rem;
+  background: var(--primary-gradient);
+  color: white;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius-small);
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-event-form button:hover {
+  background-color: var(--primary-dark);
+}
+
+.add-event-header {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+}
+
+@media (prefers-color-scheme: light) {
+  .add-event-page {
+    background-color: var(--bg-light);
+  }
+}
