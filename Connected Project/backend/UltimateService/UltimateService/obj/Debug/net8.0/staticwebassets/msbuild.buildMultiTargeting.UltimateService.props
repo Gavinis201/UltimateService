@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/UltimateService.props" />
+</Project>
