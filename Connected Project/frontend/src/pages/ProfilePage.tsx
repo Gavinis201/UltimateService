@@ -3,28 +3,28 @@ import '../styles/ProfilePage.css';
 
 // Mock user data
 const mockUserData = {
-  name: 'Jane Doe',
-  email: 'jane.doe@example.com',
-  role: 'Volunteer',
-  joinDate: '2023-09-15',
+  name: 'Laura Cutler',
+  email: 'laura.cutler@example.com',
+  role: 'Relief Society',
+  joinDate: '2018-05-10',
   profile: '/images/profile-placeholder.jpg',
-  bio: 'Passionate about community service and making a difference in people\'s lives. I enjoy participating in environmental and education-focused service projects.',
+  bio: 'Active member of the Wakefield Ward for over 5 years. I serve in the Relief Society and enjoy organizing ward activities. I\'m passionate about strengthening our ward community through service and fellowship.',
   stats: {
-    eventsAttended: 12,
-    volunteeredHours: 48,
-    upcomingEvents: 3
+    eventsAttended: 28,
+    volunteeredHours: 76,
+    upcomingEvents: 2
   },
-  interests: ['Environment', 'Education', 'Food Distribution'],
+  interests: ['Family History', 'Youth Activities', 'Relief Society', 'Temple Service'],
   badges: [
-    { id: 1, name: 'First Timer', icon: '🌟', description: 'Completed first service event' },
-    { id: 2, name: 'Green Thumb', icon: '🌱', description: 'Participated in 5 environmental events' },
-    { id: 3, name: 'Helping Hand', icon: '🤝', description: 'Volunteered for over 25 hours' }
+    { id: 1, name: 'Ward Volunteer', icon: '🌟', description: 'Volunteered for 10+ ward activities' },
+    { id: 2, name: 'Relief Society', icon: '❤️', description: 'Active in Relief Society service' },
+    { id: 3, name: 'Temple Patron', icon: '🏛️', description: 'Regular temple attendance' }
   ],
   recentActivity: [
-    { id: 1, type: 'event', name: 'Beach Cleanup', date: '2024-05-28' },
-    { id: 2, type: 'comment', name: 'Commented on Food Bank Volunteering', date: '2024-05-22' },
-    { id: 3, type: 'signup', name: 'Signed up for Senior Center Visit', date: '2024-05-20' },
-    { id: 4, type: 'event', name: 'Community Garden Planting', date: '2024-05-15' }
+    { id: 1, type: 'event', name: 'Ward Dinner Social', date: '2024-05-22' },
+    { id: 2, type: 'comment', name: 'Commented on Youth Conference', date: '2024-05-18' },
+    { id: 3, type: 'signup', name: 'Signed up for Temple Trip', date: '2024-05-15' },
+    { id: 4, type: 'event', name: 'Relief Society Meeting', date: '2024-05-10' }
   ]
 };
 

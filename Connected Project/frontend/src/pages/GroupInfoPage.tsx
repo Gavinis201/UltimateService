@@ -10,25 +10,25 @@ const GroupInfoPage: React.FC = () => {
         <section className="group-details">
           <div className="group-header">
             <div className="group-logo">
-              <img src="/logo.svg" alt="Group Logo" />
+              <img src="/logo.svg" alt="Ward Logo" />
             </div>
-            <h2>Community Service Group</h2>
+            <h2>Wakefield Ward</h2>
           </div>
           
           <div className="group-description">
             <h3>About Us</h3>
             <p>
-              We are a community-focused service group dedicated to making a positive impact through 
-              volunteer work and community engagement. Our members come together to support local 
-              initiatives and provide assistance to those in need.
+              The Wakefield Ward is a local congregation of The Church of Jesus Christ of Latter-day Saints.
+              Our ward is dedicated to serving one another and our community through Christ-centered service,
+              fellowship, and spiritual growth. We welcome all who wish to worship with us.
             </p>
           </div>
           
           <div className="mission-statement">
-            <h3>Our Mission</h3>
+            <h3>Our Purpose</h3>
             <p>
-              To build stronger communities through service, compassion, and cooperation. We believe 
-              that by working together, we can make a meaningful difference in the lives of others.
+              To help individuals and families come unto Christ by living the gospel of Jesus Christ,
+              serving others, and building a supportive community of faith where everyone feels welcome and valued.
             </p>
           </div>
         </section>
@@ -37,20 +37,20 @@ const GroupInfoPage: React.FC = () => {
           <h3>Membership Information</h3>
           <div className="membership-details">
             <div className="detail-item">
-              <span className="label">Founded:</span>
-              <span className="value">2023</span>
+              <span className="label">Established:</span>
+              <span className="value">2015</span>
             </div>
             <div className="detail-item">
               <span className="label">Members:</span>
-              <span className="value">42</span>
+              <span className="value">160</span>
             </div>
             <div className="detail-item">
-              <span className="label">Service Hours:</span>
-              <span className="value">1,250+</span>
+              <span className="label">Service Projects:</span>
+              <span className="value">24+ annually</span>
             </div>
             <div className="detail-item">
-              <span className="label">Projects Completed:</span>
-              <span className="value">35</span>
+              <span className="label">Active Organizations:</span>
+              <span className="value">Relief Society, Elder's Quorum, Primary, Young Men/Women</span>
             </div>
           </div>
         </section>
@@ -60,15 +60,19 @@ const GroupInfoPage: React.FC = () => {
           <div className="contact-details">
             <div className="detail-item">
               <span className="label">Email:</span>
-              <span className="value">contact@communityservice.org</span>
+              <span className="value">wakefieldward@churchofjesuschrist.org</span>
             </div>
             <div className="detail-item">
-              <span className="label">Phone:</span>
-              <span className="value">(555) 123-4567</span>
+              <span className="label">Bishop:</span>
+              <span className="value">Bishop Thomas Anderson</span>
             </div>
             <div className="detail-item">
               <span className="label">Meeting Schedule:</span>
-              <span className="value">Every Tuesday at 7:00 PM</span>
+              <span className="value">Sundays at 10:00 AM</span>
+            </div>
+            <div className="detail-item">
+              <span className="label">Address:</span>
+              <span className="value">123 Wakefield Street, Wakefield, MA 01880</span>
             </div>
           </div>
         </section>

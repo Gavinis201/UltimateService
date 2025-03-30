@@ -6,9 +6,9 @@ const AddEventPage: React.FC = () => {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
   const [location, setLocation] = useState("");
-  const [group, setGroup] = useState("");
+  const [group, setGroup] = useState("Wakefield Ward"); // Default to Wakefield Ward
   const [description, setDescription] = useState("");
-  const [attendees, setAttendees] = useState(0); // Added attendees
+  const [attendees, setAttendees] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -17,25 +17,33 @@ const AddEventPage: React.FC = () => {
     setLoading(true);
     setError("");
 
-    const newEvent = {
-      title,
-      date,
-      time,
-      location,
-      group,
-      description,
-      attendees,
-    }; // Include attendees
-
     try {
+      // Format the event data to match the backend model expectations
+      const formattedEvent = {
+        title,
+        // Format date properly for C# DateTime
+        date: new Date(date).toISOString(),
+        // Format time for C# TimeSpan (HH:MM:SS format)
+        time: time + ":00",
+        location,
+        group,
+        description,
+        attendees,
+      };
+
+      console.log('Submitting event:', formattedEvent);
+
       const response = await fetch("http://localhost:5000/api/event", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newEvent),
+        body: JSON.stringify(formattedEvent),
       });
 
+      const responseData = await response.text();
+      console.log('Response:', response.status, responseData);
+
       if (!response.ok) {
-        throw new Error("Failed to add event");
+        throw new Error(`Failed to add event: ${response.status} ${responseData}`);
       }
 
       alert("Event added successfully!");
@@ -43,11 +51,12 @@ const AddEventPage: React.FC = () => {
       setDate("");
       setTime("");
       setLocation("");
-      setGroup("");
+      setGroup("Wakefield Ward"); // Keep default value
       setDescription("");
-      setAttendees(0); // Reset attendees after submission
+      setAttendees(0);
     } catch (err) {
-      setError("Error adding event. Please try again.");
+      console.error('Error during submission:', err);
+      setError(`Error adding event. Please try again. ${err instanceof Error ? err.message : ''}`);
     } finally {
       setLoading(false);
     }

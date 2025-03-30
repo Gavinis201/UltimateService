@@ -1,6 +1,0 @@
-@UltimateService_HostAddress = http://localhost:5289
-
-GET {{UltimateService_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

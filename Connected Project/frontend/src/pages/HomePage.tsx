@@ -1,14 +1,36 @@
 import React, { useState } from 'react';
 import '../styles/HomePage.css';
+import { useNavigate } from 'react-router-dom';
 
 // Sample event dates for demonstration
 const eventDates = [10, 15, 22, 26];
 
 const HomePage: React.FC = () => {
+  const navigate = useNavigate();
   // Calendar functionality
   const [selectedDate, setSelectedDate] = useState<number | null>(null);
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
   const [filterType, setFilterType] = useState<string>('Month');
+  const [eventTitle, setEventTitle] = useState<string>('');
+  const [showEventModal, setShowEventModal] = useState<boolean>(false);
+  const [eventForm, setEventForm] = useState({
+    title: '',
+    date: '',
+    time: '',
+    location: '',
+    group: 'Wakefield Ward',
+    description: '',
+    attendees: 0
+  });
+
+  // Handle event form input changes
+  const handleEventFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setEventForm(prev => ({
+      ...prev,
+      [name]: name === 'attendees' ? parseInt(value) || 0 : value
+    }));
+  };
 
   // Handle filter change
   const handleFilterChange = (filter: string) => {
@@ -28,6 +50,75 @@ const HomePage: React.FC = () => {
   // Select a date
   const handleDateSelect = (day: number) => {
     setSelectedDate(day);
+  };
+
+  // Open event modal
+  const openEventModal = () => {
+    // Pre-fill the title from the input and use Wakefield Ward as the group
+    setEventForm(prev => ({
+      ...prev,
+      title: eventTitle,
+      group: 'Wakefield Ward'
+    }));
+    setShowEventModal(true);
+  };
+
+  // Close event modal
+  const closeEventModal = () => {
+    setShowEventModal(false);
+  };
+
+  // Submit event form
+  const handleEventSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      // Format the event data to match the backend model expectations
+      const formattedEvent = {
+        title: eventForm.title,
+        // Format date properly for C# DateTime
+        date: new Date(eventForm.date).toISOString(),
+        // Format time for C# TimeSpan (HH:MM:SS format)
+        time: eventForm.time + ":00",
+        location: eventForm.location,
+        group: eventForm.group,
+        description: eventForm.description,
+        attendees: eventForm.attendees
+      };
+
+      console.log('Submitting event:', formattedEvent);
+
+      const response = await fetch("http://localhost:5000/api/event", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formattedEvent),
+      });
+
+      const responseData = await response.text();
+      console.log('Response:', response.status, responseData);
+
+      if (!response.ok) {
+        throw new Error(`Failed to add event: ${response.status} ${responseData}`);
+      }
+
+      alert("Event added successfully!");
+      setEventTitle('');
+      setEventForm({
+        title: '',
+        date: '',
+        time: '',
+        location: '',
+        group: 'Wakefield Ward',
+        description: '',
+        attendees: 0
+      });
+      setShowEventModal(false);
+      
+      // Optionally redirect to see the events
+      // navigate('/event-list');
+    } catch (err) {
+      console.error('Error during submission:', err);
+      alert(`Error adding event. Please try again. ${err instanceof Error ? err.message : ''}`);
+    }
   };
 
   // Get today's date
@@ -78,12 +169,98 @@ const HomePage: React.FC = () => {
           <div className="input-container">
             <input 
               type="text" 
-              placeholder="Event details..." 
+              placeholder="Event Title" 
               className="event-input"
+              value={eventTitle}
+              onChange={(e) => setEventTitle(e.target.value)}
             />
-            <button className="add-button">+</button>
+            <button className="add-button" onClick={openEventModal}>+</button>
           </div>
         </section>
+
+        {/* Event Form Modal */}
+        {showEventModal && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <h2>Add New Event</h2>
+              <form onSubmit={handleEventSubmit} className="event-form">
+                <div className="form-group">
+                  <label>Title</label>
+                  <input
+                    type="text"
+                    name="title"
+                    value={eventForm.title}
+                    onChange={handleEventFormChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Date</label>
+                  <input
+                    type="date"
+                    name="date"
+                    value={eventForm.date}
+                    onChange={handleEventFormChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Time</label>
+                  <input
+                    type="time"
+                    name="time"
+                    value={eventForm.time}
+                    onChange={handleEventFormChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Location</label>
+                  <input
+                    type="text"
+                    name="location"
+                    value={eventForm.location}
+                    onChange={handleEventFormChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Group</label>
+                  <input
+                    type="text"
+                    name="group"
+                    value={eventForm.group}
+                    onChange={handleEventFormChange}
+                    required
+                  />
+                </div>
+                <div className="form-group">
+                  <label>Description</label>
+                  <textarea
+                    name="description"
+                    value={eventForm.description}
+                    onChange={handleEventFormChange}
+                    required
+                  ></textarea>
+                </div>
+                <div className="form-group">
+                  <label>Number of Attendees</label>
+                  <input
+                    type="number"
+                    name="attendees"
+                    value={eventForm.attendees}
+                    onChange={handleEventFormChange}
+                    required
+                  />
+                </div>
+                <div className="form-actions">
+                  <button type="button" onClick={closeEventModal} className="cancel-btn">Cancel</button>
+                  <button type="submit" className="submit-btn">Add Event</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
 
         <section className="upcoming-events-section">
           <div className="header-with-filter">
