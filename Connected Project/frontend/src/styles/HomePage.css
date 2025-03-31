@@ -363,3 +363,46 @@
 .submit-btn:hover {
   background-color: var(--primary-dark);
 } 
+
+
+/* Event dot indicator */
+.event-dot {
+  display: block;
+  width: 6px;
+  height: 6px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+  margin: 2px auto 0;
+}
+
+/* Date Events Modal */
+.date-events-list {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.event-item {
+  padding: 10px;
+  margin: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.details-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
