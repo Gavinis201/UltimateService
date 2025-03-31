@@ -1,18 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../styles/HomePage.css';
 import { useNavigate } from 'react-router-dom';
+
+
+interface Event {
+  id: number;
+  title: string;
+  date: string;
+  time: string;
+  location: string;
+  group: string;
+  attendees: number;
+  description: string;
+}
 
 // Sample event dates for demonstration
 const eventDates = [10, 15, 22, 26];
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
-  // Calendar functionality
-  const [selectedDate, setSelectedDate] = useState<number | null>(null);
+  const [events, setEvents] = useState<Event[]>([]);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
   const [filterType, setFilterType] = useState<string>('Month');
   const [eventTitle, setEventTitle] = useState<string>('');
   const [showEventModal, setShowEventModal] = useState<boolean>(false);
+  const [showDateEventsModal, setShowDateEventsModal] = useState<boolean>(false);
   const [eventForm, setEventForm] = useState({
     title: '',
     date: '',
@@ -22,6 +35,60 @@ const HomePage: React.FC = () => {
     description: '',
     attendees: 0
   });
+
+    // Fetch all events on component mount
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/event");
+        if (!response.ok) throw new Error("Failed to fetch events");
+        const data = await response.json();
+        setEvents(data);
+      } catch (err) {
+        console.error("Error fetching events:", err);
+      }
+    };
+    fetchEvents();
+  }, []);
+
+  const hasEvents = (day: number) => {
+    const dateStr = new Date(
+      currentMonth.getFullYear(),
+      currentMonth.getMonth(),
+      day
+    ).toISOString().split('T')[0];
+    
+    return events.some(event => 
+      new Date(event.date).toISOString().split('T')[0] === dateStr
+    );
+  };
+
+  // Get events for a specific date
+  const getEventsForDate = (day: number) => {
+    const dateStr = new Date(
+      currentMonth.getFullYear(),
+      currentMonth.getMonth(),
+      day
+    ).toISOString().split('T')[0];
+    
+    return events.filter(event => 
+      new Date(event.date).toISOString().split('T')[0] === dateStr
+    );
+  };
+
+  const handleDateSelect = (day: number) => {
+    const date = new Date(
+      currentMonth.getFullYear(),
+      currentMonth.getMonth(),
+      day
+    );
+    setSelectedDate(date);
+    
+    const dateEvents = getEventsForDate(day);
+    if (dateEvents.length > 0) {
+      setShowDateEventsModal(true);
+    }
+  };
 
   // Handle event form input changes
   const handleEventFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -47,10 +114,6 @@ const HomePage: React.FC = () => {
     setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1));
   };
 
-  // Select a date
-  const handleDateSelect = (day: number) => {
-    setSelectedDate(day);
-  };
 
   // Open event modal
   const openEventModal = () => {
@@ -124,7 +187,7 @@ const HomePage: React.FC = () => {
   // Get today's date
   const today = new Date();
   const isCurrentMonth = today.getMonth() === currentMonth.getMonth() && 
-                         today.getFullYear() === currentMonth.getFullYear();
+                          today.getFullYear() === currentMonth.getFullYear();
   const todayDate = today.getDate();
 
   // Check if a date has an event
@@ -141,15 +204,16 @@ const HomePage: React.FC = () => {
     const days = [];
     for (let day = 1; day <= totalDays; day++) {
       const isToday = isCurrentMonth && day === todayDate;
-      const dayHasEvent = hasEvent(day);
+      const dayHasEvents = hasEvents(day);
       
       days.push(
         <div 
           key={day} 
-          className={`calendar-day ${day === selectedDate ? 'selected' : ''} ${isToday ? 'today' : ''} ${dayHasEvent ? 'has-event' : ''}`}
+          className={`calendar-day ${day === selectedDate?.getDate() ? 'selected' : ''} ${isToday ? 'today' : ''} ${dayHasEvents ? 'has-event' : ''}`}
           onClick={() => handleDateSelect(day)}
         >
           {day}
+          {dayHasEvents && <span className="event-dot"></span>}
         </div>
       );
     }
@@ -328,20 +392,44 @@ const HomePage: React.FC = () => {
           </div>
         </section>
 
-        <section className="post-comment-section">
-          <h2>Post a Comment</h2>
-          <div className="input-container">
-            <input 
-              type="text" 
-              placeholder="Add a comment..." 
-              className="comment-input"
-            />
-            <button className="add-button">+</button>
-          </div>
-        </section>
       </div>
+  {/* Date Events Modal */}
+  {showDateEventsModal && selectedDate && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>Events on {selectedDate.toLocaleDateString()}</h2>
+            <button 
+              className="close-button" 
+              onClick={() => setShowDateEventsModal(false)}
+            >
+              ×
+            </button>
+            
+            <div className="date-events-list">
+              {getEventsForDate(selectedDate.getDate()).length > 0 ? (
+                getEventsForDate(selectedDate.getDate()).map(event => (
+                  <div key={event.id} className="event-item">
+                    <h3>{event.title}</h3>
+                    <p>Time: {event.time}</p>
+                    <p>Location: {event.location}</p>
+                    <p>Group: {event.group}</p>
+                    <button 
+                      onClick={() => navigate(`/event-details/${event.id}`)}
+                      className="details-button"
+                    >
+                      Back
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <p>No events for this date</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default HomePage; 
+export default HomePage;
