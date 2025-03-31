@@ -1,13 +1,25 @@
 .group-info-page {
-  padding-top: 60px; /* To account for the fixed navbar */
+  padding-top: 70px; /* Increased to account for the fixed navbar */
   min-height: 100vh;
   background-color: var(--bg-color);
+  width: 100%;
+  position: relative;
+  overflow-x: hidden;
+}
+
+@media (max-width: 500px) {
+  .group-info-page {
+    padding-top: 80px; /* More padding on mobile */
+  }
 }
 
 .content {
   padding: 1rem;
   max-width: 600px;
   margin: 0 auto;
+  width: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
 .group-info-page h1 {
@@ -43,18 +55,20 @@
   height: 70px;
   border-radius: 50%;
   overflow: hidden;
-  background-color: var(--primary-transparent);
+  background-color: white;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-right: 1.25rem;
   border: 2px solid var(--primary-color);
   box-shadow: 0 2px 8px rgba(39, 115, 232, 0.15);
+  padding: 5px;
 }
 
 .group-logo img {
-  width: 70%;
-  height: auto;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .group-header h2 {

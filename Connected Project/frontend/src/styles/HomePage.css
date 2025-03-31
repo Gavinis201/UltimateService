@@ -1,13 +1,25 @@
 .home-page {
-  padding-top: 60px; /* To account for the fixed navbar */
+  padding-top: 70px; /* Increased to account for the fixed navbar */
   min-height: 100vh;
   background-color: var(--bg-color);
+  width: 100%;
+  position: relative;
+  overflow-x: hidden;
+}
+
+@media (max-width: 500px) {
+  .home-page {
+    padding-top: 80px; /* More padding on mobile */
+  }
 }
 
 .content {
   padding: 1rem;
   max-width: 600px;
   margin: 0 auto;
+  width: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
 /* Post Event Section */

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/LoginPage.css';
+import logoImage from '../assets/Untitled design.png';
 
 interface LoginPageProps {
   onLoginSuccess?: () => void;
@@ -57,7 +58,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
       <div className="login-container fade-in">
         <div className="logo-section">
           <div className="login-logo-container">
-            <img src="/logo.svg" alt="Ultimate Service Logo" className="login-logo" />
+            <img src={logoImage} alt="Wakefield Ward Logo" className="login-logo" />
           </div>
           <h1 className="app-name">Ultimate Service</h1>
           <p className="app-tagline">Connect, Serve, Create Impact</p>

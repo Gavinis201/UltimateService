@@ -50,10 +50,17 @@
 }
 
 .main-content {
-  flex: 1;
-  padding-top: 60px; /* Height of the navbar */
+  padding-top: 70px; /* Height of the navbar - increased for better spacing */
+  min-height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
   position: relative;
-  z-index: 1;
+}
+
+@media (max-width: 500px) {
+  .main-content {
+    padding-top: 80px; /* More padding on mobile */
+  }
 }
 
 /* Utility classes */

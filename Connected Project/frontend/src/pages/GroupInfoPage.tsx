@@ -1,5 +1,6 @@
 import React from 'react';
 import '../styles/GroupInfoPage.css';
+import logoImage from '../assets/Untitled design.png';
 
 const GroupInfoPage: React.FC = () => {
   return (
@@ -10,7 +11,7 @@ const GroupInfoPage: React.FC = () => {
         <section className="group-details">
           <div className="group-header">
             <div className="group-logo">
-              <img src="/logo.svg" alt="Ward Logo" />
+              <img src={logoImage} alt="Ward Logo" />
             </div>
             <h2>Wakefield Ward</h2>
           </div>

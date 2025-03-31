@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/NavBar.css';
+import logoImage from '../assets/Untitled design.png';
 
 interface NavBarProps {
   onMenuToggle: () => void;
@@ -27,7 +28,7 @@ const NavBar: React.FC<NavBarProps> = ({ onMenuToggle }) => {
       <div className="navbar-center">
         <Link to="/" className="logo-link">
           <div className="logo-container">
-            <img src="/logo.svg" alt="Service App Logo" className="logo" />
+            <img src={logoImage} alt="Wakefield Ward Logo" className="logo" />
           </div>
         </Link>
       </div>
